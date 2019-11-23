@@ -1,9 +1,9 @@
 package controller;
 
 import model.Ladder;
-import model.LadderLine;
 import model.LadderResult;
 import model.User;
+import model.UserResult;
 import view.InputView;
 import view.OutputView;
 
@@ -12,72 +12,73 @@ import java.util.List;
 
 public class LadderController {
     public static int LADDER_HEIGHT;
-    private static List<User> users = new ArrayList<>();
-    private static List<LadderResult> results = new ArrayList<>();
+    private final static List<User> users = new ArrayList<>();
+    private final static List<LadderResult> ladderResults = new ArrayList<>();
+    private final static List<UserResult>  userResults = new ArrayList<>();
     private static Ladder ladder;
 
-    public void setUsers() {
-        OutputView.printGetUserNames();
-        String usernames = InputView.getUsers();
-        for (String username : usernames.split(",")) {
-            users.add(new User(username));
+    public void runLadder(){
+        setUsers();
+        setLadder();
+        setLadderResultsUserResults();
+        OutputView.showLadder(ladder, users, ladderResults);
+        String selectedResult = "";
+        while(!(selectedResult.equals("stop"))){
+            OutputView.printSelectUserResult();
+            selectedResult = InputView.getSelectedResult();
+            showResult(selectedResult);
         }
     }
 
-    public void setLadder() {
+    private void setUsers() {
+        OutputView.printGetUserNames();
+        String usernames = InputView.getUsers();
+        for (String username : usernames.split(",")) {
+            User user = new User(username);
+            users.add(user);
+        }
+    }
+
+    private void setLadder() {
         OutputView.printGetLadderHeight();
         LADDER_HEIGHT = InputView.getLadderHeight();
         ladder = new Ladder(LADDER_HEIGHT, users.size());
     }
 
-    public void showLadder() {
-        OutputView.drawLadder(ladder, users, results);
-        setCorrectResult();
+    private void setLadderResultsUserResults() {
+        OutputView.printGetResults();
+        String stringResults = InputView.getResults();
+        setLadderResults(stringResults);
+        setUserResults(stringResults);
     }
 
-    public void setResults() {
-        for (int i = 0; i < users.size(); i++) {
-            results.add(new LadderResult());
+    private void setLadderResults(String stringResults){
+        for (String result : stringResults.split(",")) {
+            LadderResult ladderResult = new LadderResult(result);
+            ladderResults.add(ladderResult);
         }
     }
 
-    public void showResult(String selectedUser) {
-        if (selectedUser.equals("all")) {
-            OutputView.printAllResult(users, results);
+    private void setUserResults(String stringResults) {
+        String[] results = stringResults.split(",");
+        UserResult.makeUserResults(userResults, results, ladder);
+    }
+
+    private void showResult(String selectedResult) {
+        if (selectedResult.equals("all")) {
+            OutputView.printAllResult(users, userResults);
             return;
         }
-        showUserResult(selectedUser);
+        showUserResult(selectedResult);
     }
 
-    public void showUserResult(String selectedUser) {
+    private void showUserResult(String selectedUser) {
         boolean selected = false;
         int index;
         for (index = 0; index < users.size() && selected != true; index++) {
             selected = users.get(index).isSelected(selectedUser);
         }
         if (selected == true)
-            OutputView.printSelectedResult(results.get(index - 1).getValue());
-    }
-
-    public void setCorrectResult() {
-        List<LadderResult> correctedResults = new ArrayList<>();
-        for (int lineIndex = 1; lineIndex <= users.size(); lineIndex++)
-            setUsersResults(lineIndex, correctedResults);
-        results = correctedResults;
-    }
-
-    private void setUsersResults(int lineIndex, List<LadderResult> correctedResults) {
-        for (LadderLine currentLine : ladder.getLadderLines()) {
-            lineIndex = moveCurrentPoint(lineIndex, currentLine);
-        }
-        correctedResults.add(results.get(lineIndex-1));
-    }
-
-    public int moveCurrentPoint(int lineIndex, LadderLine currentLine) {
-        if (lineIndex != users.size() && currentLine.getPoints().get(lineIndex))
-            return ++lineIndex;
-        if (lineIndex > 0 && currentLine.getPoints().get(lineIndex - 1))
-            return --lineIndex;
-        return lineIndex;
+            OutputView.printSelectedResult(userResults.get(index - 1).getResult());
     }
 }

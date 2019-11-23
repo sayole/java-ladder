@@ -10,10 +10,14 @@ public class InputView {
     }
 
     public static int getLadderHeight() {
-        return scanner.nextInt();
+        return Integer.parseInt(scanner.nextLine());
     }
 
     public static String getSelectedResult() {
+        return scanner.nextLine();
+    }
+
+    public static String getResults() {
         return scanner.nextLine();
     }
 }

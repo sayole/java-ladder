@@ -1,10 +1,11 @@
 package model;
 
 import java.util.ArrayList;
+import java.util.List;
 import java.util.Random;
 
 public class LadderLine {
-    private ArrayList<Boolean> points = new ArrayList<>();
+    private List<Boolean> points = new ArrayList<>();
 
     public LadderLine(int countOfUsers) {
         setLadderLine(countOfUsers);
@@ -18,12 +19,12 @@ public class LadderLine {
         }
     }
 
-    public ArrayList<Boolean> getPoints() {
+    public List<Boolean> getPoints() {
         return points;
     }
 
     private boolean setPoint(boolean lastPoint) {
-        if(!lastPoint && hasPoint()) {
+        if (!lastPoint && hasPoint()) {
             points.add(true);
             return true;
         }
