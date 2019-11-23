@@ -54,8 +54,23 @@ public class LadderController {
 
     private void setLadder() {
         OutputView.printGetLadderHeight();
-        LADDER_HEIGHT = InputView.getLadderHeight();
+        setLadderHeight();
         ladder = new Ladder(LADDER_HEIGHT, users.size());
+    }
+
+    private void setLadderHeight() {
+        try{
+            LADDER_HEIGHT = InputView.getLadderHeight();
+            checkLadderHeightRange();
+        }catch(NumberFormatException e){
+            OutputView.badInputWithLadderHeight();
+            setLadderHeight();
+        }
+    }
+
+    private void checkLadderHeightRange() {
+        if(LADDER_HEIGHT < 1)
+            throw new NumberFormatException();
     }
 
     private void setLadderResultsUserResults() {

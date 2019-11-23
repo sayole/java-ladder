@@ -99,4 +99,8 @@ public class OutputView {
     public static void badInputWithUserNumber() {
         System.out.println("두명 이상의 사용자 이름을 입력해 주세요.");
     }
+
+    public static void badInputWithLadderHeight() {
+        System.out.println("0보다 큰 정수의 높이를 입력해주세요.");
+    }
 }
