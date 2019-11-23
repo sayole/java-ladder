@@ -4,8 +4,6 @@ import java.util.List;
 
 public class User {
     public static final int MAX_NAME_LENGTH = 5;
-    public static final int MINIMUM_NAME_LENGTH = 1;
-    public static final int MINIMUM_USERS = 2;
     private String name;
 
     public User(String userName) {

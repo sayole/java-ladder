@@ -15,7 +15,7 @@ public class LadderLine {
         boolean lastPoint = false;
         points.add(lastPoint);
         for (int i = 0; i < countOfUsers - 1; i++) {
-            lastPoint = setPoint(lastPoint);
+            lastPoint = isPoint(lastPoint);
         }
     }
 
@@ -23,7 +23,7 @@ public class LadderLine {
         return points;
     }
 
-    private boolean setPoint(boolean lastPoint) {
+    private boolean isPoint(boolean lastPoint) {
         if (!lastPoint && hasPoint()) {
             points.add(true);
             return true;
