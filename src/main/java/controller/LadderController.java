@@ -4,8 +4,7 @@ import model.Ladder;
 import model.LadderResult;
 import model.User;
 import model.UserResult;
-import view.InputView;
-import view.OutputView;
+import view.*;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -20,19 +19,12 @@ public class LadderController {
 
     public void runLadder() {
         setUsers();
+        String stringResults = getCorrectResults();
+        setLadderResults(stringResults);
         setLadder();
-        setLadderResultsUserResults();
-        OutputView.showLadder(ladder, users, ladderResults);
+        setUserResults(stringResults);
+        showLadder();
         runLadderResult();
-    }
-
-    private void runLadderResult() {
-        String selectedResult = "";
-        while (!(selectedResult.equals("stop"))) {
-            OutputView.printSelectUserResult();
-            selectedResult = InputView.getSelectedResult();
-            showResult(selectedResult);
-        }
     }
 
     private void setUsers() {
@@ -41,14 +33,32 @@ public class LadderController {
         for (String userName : userNames.split(",")) {
             User.addIfGoodInput(userName, users);
         }
-        restartSetUsersIfBadSize();
+        restartIfBadSize();
     }
 
-    private void restartSetUsersIfBadSize() {
+    private void restartIfBadSize() {
         if (users.size() < MINIMUM_USERS) {
-            OutputView.badInputWithUserNumber();
+            ErrorOutputView.badInputWithUserNumber();
             users.removeAll(users);
             setUsers();
+        }
+    }
+
+    private String getCorrectResults() {
+        OutputView.printGetResults();
+        String stringResults = InputView.getResults();
+        int resultNumber = stringResults.split(",").length;
+        if (resultNumber != users.size()) {
+            ErrorOutputView.badInputWithResultNumber();
+            return getCorrectResults();
+        }
+        return stringResults;
+    }
+
+    private void setLadderResults(String stringResults) {
+        for (String result : stringResults.split(",")) {
+            LadderResult ladderResult = new LadderResult(result);
+            ladderResults.add(ladderResult);
         }
     }
 
@@ -63,7 +73,7 @@ public class LadderController {
             LADDER_HEIGHT = InputView.getLadderHeight();
             checkLadderHeightRange();
         } catch (NumberFormatException e) {
-            OutputView.badInputWithLadderHeight();
+            ErrorOutputView.badInputWithLadderHeight();
             setLadderHeight();
         }
     }
@@ -73,38 +83,29 @@ public class LadderController {
             throw new NumberFormatException();
     }
 
-    private void setLadderResultsUserResults() {
-        String stringResults = getResults();
-        setLadderResults(stringResults);
-        setUserResults(stringResults);
-    }
-
-    private String getResults() {
-        OutputView.printGetResults();
-        String stringResults = InputView.getResults();
-        int resultNumber = stringResults.split(",").length;
-        if (resultNumber != users.size()) {
-            OutputView.badInputWithResultNumber();
-            return getResults();
-        }
-        return stringResults;
-    }
-
-    private void setLadderResults(String stringResults) {
-        for (String result : stringResults.split(",")) {
-            LadderResult ladderResult = new LadderResult(result);
-            ladderResults.add(ladderResult);
-        }
-    }
-
     private void setUserResults(String stringResults) {
         String[] results = stringResults.split(",");
         UserResult.makeUserResults(userResults, results, ladder);
     }
 
+    private void runLadderResult() {
+        String selectedResult = "";
+        while (!(selectedResult.equals("stop"))) {
+            OutputView.printSelectUserResult();
+            selectedResult = InputView.getSelectedResult();
+            showResult(selectedResult);
+        }
+    }
+
+    private void showLadder() {
+        UserOutputView.printName(users);
+        LadderOutputView.printLadder(ladder);
+        ResultOutputView.printResult(ladderResults);
+    }
+
     private void showResult(String selectedResult) {
         if (selectedResult.equals("all")) {
-            OutputView.printAllResult(users, userResults);
+            ResultOutputView.printAllResult(users, userResults);
             return;
         }
         showUserResult(selectedResult);
@@ -117,7 +118,7 @@ public class LadderController {
             selected = users.get(index).isSelected(selectedUser);
         }
         if (selected == true) {
-            OutputView.printSelectedResult(userResults.get(index - 1).getResult());
+            ResultOutputView.printSelectedResult(userResults.get(index - 1).getResult());
         }
     }
 }
