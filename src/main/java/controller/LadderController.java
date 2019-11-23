@@ -53,31 +53,41 @@ public class LadderController {
     }
 
     private void setLadder() {
-        OutputView.printGetLadderHeight();
         setLadderHeight();
         ladder = new Ladder(LADDER_HEIGHT, users.size());
     }
 
     private void setLadderHeight() {
-        try{
+        try {
+            OutputView.printGetLadderHeight();
             LADDER_HEIGHT = InputView.getLadderHeight();
             checkLadderHeightRange();
-        }catch(NumberFormatException e){
+        } catch (NumberFormatException e) {
             OutputView.badInputWithLadderHeight();
             setLadderHeight();
         }
     }
 
     private void checkLadderHeightRange() {
-        if(LADDER_HEIGHT < 1)
+        if (LADDER_HEIGHT < 1)
             throw new NumberFormatException();
     }
 
     private void setLadderResultsUserResults() {
-        OutputView.printGetResults();
-        String stringResults = InputView.getResults();
+        String stringResults = getResults();
         setLadderResults(stringResults);
         setUserResults(stringResults);
+    }
+
+    private String getResults() {
+        OutputView.printGetResults();
+        String stringResults = InputView.getResults();
+        int resultNumber = stringResults.split(",").length;
+        if (resultNumber != users.size()) {
+            OutputView.badInputWithResultNumber();
+            return getResults();
+        }
+        return stringResults;
     }
 
     private void setLadderResults(String stringResults) {
