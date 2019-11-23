@@ -13,11 +13,15 @@ public class OutputView {
     }
 
     public static void printGetResults() {
-        System.out.println("실행 결과를 입력하세요. (결과는 쉼표(,)로 구분하세요)");
+        System.out.println("\n실행 결과를 입력하세요. (결과는 쉼표(,)로 구분하세요)");
     }
 
     public static void printGetLadderHeight() {
-        System.out.println("사다리의 높이는 몇개인가요?");
+        System.out.println("\n사다리의 높이는 몇개인가요?");
+    }
+
+    public static void printSelectUserResult() {
+        System.out.println("\n결과를 보고 싶은 사람은? (종료는 stop)");
     }
 
     public static StringBuilder appendMark(StringBuilder stringBuilder, int count, char mark) {
@@ -32,10 +36,4 @@ public class OutputView {
         stringBuilder = OutputView.appendMark(stringBuilder, spaceSize, SPACE);
         return stringBuilder.append(" " + string);
     }
-
-    public static void printSelectUserResult() {
-        System.out.println("\n결과를 보고 싶은 사람은? (종료는 stop)");
-    }
-
-
 }

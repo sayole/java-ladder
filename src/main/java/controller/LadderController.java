@@ -88,6 +88,12 @@ public class LadderController {
         UserResult.makeUserResults(userResults, results, ladder);
     }
 
+    private void showLadder() {
+        UserOutputView.printName(users);
+        LadderOutputView.printLadder(ladder);
+        ResultOutputView.printResult(ladderResults);
+    }
+
     private void runLadderResult() {
         String selectedResult = "";
         while (!(selectedResult.equals("stop"))) {
@@ -95,12 +101,6 @@ public class LadderController {
             selectedResult = InputView.getSelectedResult();
             showResult(selectedResult);
         }
-    }
-
-    private void showLadder() {
-        UserOutputView.printName(users);
-        LadderOutputView.printLadder(ladder);
-        ResultOutputView.printResult(ladderResults);
     }
 
     private void showResult(String selectedResult) {
@@ -117,8 +117,10 @@ public class LadderController {
         for (index = 0; index < users.size() && selected != true; index++) {
             selected = users.get(index).isSelected(selectedUser);
         }
-        if (selected == true) {
-            ResultOutputView.printSelectedResult(userResults.get(index - 1).getResult());
+        if (selected != true) {
+            ErrorOutputView.badInputWithUserName();
+            return;
         }
+        ResultOutputView.printSelectedResult(userResults.get(index - 1).getResult());
     }
 }
