@@ -95,4 +95,8 @@ public class OutputView {
             System.out.println(users.get(i).getName() + " : " + userResults.get(i).getResult());
         }
     }
+
+    public static void badInputWithUserNumber() {
+        System.out.println("두명 이상의 사용자 이름을 입력해 주세요.");
+    }
 }

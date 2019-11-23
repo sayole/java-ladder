@@ -1,24 +1,29 @@
 package model;
 
+import java.util.List;
+
 public class User {
     public static final int MAX_NAME_LENGTH = 5;
     public static final int MINIMUM_NAME_LENGTH = 1;
+    public static final int MINIMUM_USERS = 2;
     private String name;
 
-    public User(String nameInput) {
-        correctIfNoValidName(nameInput);
+    public User(String userName) {
+        this.name = userName;
     }
 
-    private void correctIfNoValidName(String nameInput) {
-        if (nameInput.length() > MAX_NAME_LENGTH) {
-            makeValidName(nameInput);
+    public static void addIfGoodInput(String userName, List<User> users) {
+        if(userName.equals(""))
             return;
+        if (userName.length() > MAX_NAME_LENGTH) {
+            userName = makeValidName(userName);
         }
-        name = nameInput;
+        User user = new User(userName);
+        users.add(user);
     }
 
-    private void makeValidName(String nameInput) {
-        name = nameInput.substring(0, MAX_NAME_LENGTH);
+    private static String makeValidName(String nameInput) {
+        return nameInput.substring(0, MAX_NAME_LENGTH);
     }
 
     public String getName() {
